@@ -19,12 +19,12 @@ fluidPage(
             conditionalPanel("input.TABS=='Riskfactor_disorder'",
                              selectInput('Disorder_enc',
                                          choices = sort(unique(na.omit(encounters$REASONDESCRIPTION))),
-                                         label = "Encounter reason")
+                                         label = "Cause of encounter")
                              ),
             conditionalPanel("input.TABS=='map'",
                              selectInput('Encounter_reason',
                                          choices = sort(unique(na.omit(encounters$DESCRIPTION))),
-                                         label = "Encounter reason"
+                                         label = "Encounter description"
                              )
             )
         ),
@@ -47,7 +47,7 @@ fluidPage(
                 ,
                 tabPanel(value = "map",
                          title = "Home address of Patient",
-                         leafletOutput("map")
+                         leafletOutput("map", height = '100')
                 )
             )
         )

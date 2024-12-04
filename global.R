@@ -10,3 +10,6 @@ library(leaflet.extras)
 
 load("data/temp_data.RData")
 
+encounter_patient = left_join(encounters,
+                              patients,
+                              by = c("PATIENT"= "Id"))

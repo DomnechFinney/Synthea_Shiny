@@ -180,6 +180,33 @@ Patient_encounters = left_join(patients,
                                )
 
 
+
+
+# to be confirmed ---------------------------------------------------------
+
+
+
+#create population by condition.
+condition_population = conditions %>%
+  filter(grepl("(disorder)", DESCRIPTION, ignore.case = TRUE)) %>%
+  group_by(DESCRIPTION) %>%
+  summarise(condition_count = n_distinct(PATIENT))
+
+encounter_patient = left_join(encounters,
+                              patients,
+                              by = c("PATIENT"= "Id"))
+
+
+#check if any conditions not in encounters
+# condition_list1 = conditions %>%
+#   filter(grepl("(disorder)", DESCRIPTION, ignore.case = TRUE)) %>%
+#   select(DESCRIPTION) %>%
+#   unique()
+# condition_list2 = encounters %>%
+#   filter(grepl("(disorder)", REASONDESCRIPTION, ignore.case = TRUE)) %>%
+#   select(REASONDESCRIPTION) %>%
+#   unique()
+
 # Save output -------------------------------------------------------------
 
 

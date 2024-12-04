@@ -1,5 +1,5 @@
 ---
-title: "Gingivitis "
+title: "Gingivitis Investigation"
 author: "Dom Finney"
 date: "2024-12-04"
 output: ioslides_presentation
@@ -12,7 +12,10 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Introduction
 
-Lets investigate whether Gingivitis varies across any common demographics. - Age - Gender/Sex
+Lets investigate whether Gingivitis varies across any common demographics.
+
+- Age
+- Gender
 
 ```{r include=FALSE}
 library(tidyverse)
@@ -29,9 +32,6 @@ gingivitis = Patient_conditions %>%
 patients_with_gingivitis = patients %>%
   filter(Id %in% unique(gingivitis$Id))
 
-# hist(patients_with_gingivitis$age)
-#all patients
-# hist(patients$age)
 
 combined_age = patients %>%
   select(age) %>%
