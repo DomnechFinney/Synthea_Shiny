@@ -1,0 +1,117 @@
+---
+title: "Gingivitis "
+author: "Dom Finney"
+date: "2024-12-04"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+```
+
+## Introduction
+
+Lets investigate whether Gingivitis varies across any common demographics. - Age - Gender/Sex
+
+```{r include=FALSE}
+library(tidyverse)
+load("../data/temp_data.RData")
+```
+
+## Age
+
+```{r age, echo = FALSE}
+
+gingivitis = Patient_conditions %>%
+  filter(DESCRIPTION == "Gingivitis (disorder)")
+
+patients_with_gingivitis = patients %>%
+  filter(Id %in% unique(gingivitis$Id))
+
+# hist(patients_with_gingivitis$age)
+#all patients
+# hist(patients$age)
+
+combined_age = patients %>%
+  select(age) %>%
+  mutate(group = "all") %>%
+  rbind(., 
+        patients_with_gingivitis %>%
+        select(age) %>%
+        mutate(group = "Gingivitis")
+        )
+
+
+ggplot(combined_age, aes(x = age, fill = group)) +
+  geom_histogram(position = "identity", alpha = 0.5, bins = 30) +
+  scale_fill_manual(values = c("blue", "red")) +
+  theme_minimal() +
+  labs(title = "Histogram of Gingivitis population", x = "Value", y = "Frequency", fill = "Group")
+```
+
+## Gender
+
+```{r sex, echo = FALSE}
+patients_without_gingivitis = patients[!patients$Id %in% unique(patients_with_gingivitis$Id), ]
+patients_without_gingivitis = patients_without_gingivitis %>%
+  select(GENDER) %>%
+  mutate(Disease_status = 0)
+
+patients_with_gingivitis = patients_with_gingivitis %>%
+  mutate(Disease_status = 1) %>%
+  select(GENDER, Disease_status)
+
+combined_gender = rbind(patients_without_gingivitis,
+                        patients_with_gingivitis) %>%
+  group_by(GENDER, Disease_status) %>%
+  summarise(Prevalence = n(), .groups = "drop") %>%
+  ungroup()
+
+combined_gender_proportion = combined_gender %>%
+  group_by(Disease_status) %>%
+  mutate(Proportion = Prevalence / sum(Prevalence) * 100)
+
+
+ggplot(combined_gender_proportion, aes(x = Disease_status, y = Prevalence, fill = GENDER)) +
+  geom_bar(stat = "identity", position = "stack") +
+  geom_text(
+    aes(label = paste0(round(Proportion, 1), "%")), 
+    position = position_stack(vjust = 0.5),        
+    color = "white"                                
+  ) +
+  theme_minimal() +
+  scale_fill_manual(values = c("pink", "blue")) +
+  labs(
+    title = "Disease Prevalence by Gender and Disease Status",
+    x = "Disease Status",
+    y = "Count",
+    fill = "Gender"
+  )
+```
+
+## Frequency of encounter
+
+```{r Encounter Frequency}
+
+encounters_Gingivitis = encounters %>%
+  filter(REASONDESCRIPTION == "Gingivitis (disorder)") %>%
+  mutate(Year=format(START_POSIX, "%Y")) %>%
+  group_by(Year) %>%
+  summarise(Frequency= n()) %>%
+  ungroup()
+
+ggplot(encounters_Gingivitis, aes(x = Year, y = Frequency)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  geom_text(aes(label = Frequency), vjust = -0.5) +  # Add labels above bars
+  theme_minimal() +
+  labs(
+    title = "Frequency of encounter caused by Gingivitis",
+    x = "Year",
+    y = "Frequency"
+  )
+
+
+
+
+```
