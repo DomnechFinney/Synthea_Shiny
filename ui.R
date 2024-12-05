@@ -7,19 +7,19 @@ fluidPage(
             conditionalPanel("input.TABS=='Medication_treament'",
                              selectInput('Treaments',
                                          choices = sort(unique(na.omit(medications$REASONDESCRIPTION))),
-                                         label = "Treament"
+                                         label = "Disorder"
                                          )
                              ),
             conditionalPanel("input.TABS=='Procedure_disorder'",
                              selectInput('Disorder',
                                          choices = sort(unique(na.omit(procedures$REASONDESCRIPTION))),
-                                         label = "Disorder"
+                                         label = "Cause of procedure"
                                          )
                              ),
             conditionalPanel("input.TABS=='Riskfactor_disorder'",
                              selectInput('Disorder_enc',
                                          choices = sort(unique(na.omit(encounters$REASONDESCRIPTION))),
-                                         label = "Cause of encounter")
+                                         label = "condition of interest")
                              ),
             conditionalPanel("input.TABS=='map'",
                              selectInput('Encounter_reason',
@@ -36,18 +36,18 @@ fluidPage(
                          tableOutput("med_disorder")
                          ),
                 tabPanel(value = "Procedure_disorder",
-                         title = "Common procedure for disorder",
+                         title = "Common procedures as treatment",
                          tableOutput("proced_disorder")
                          )
                 ,
                 tabPanel(value = "Riskfactor_disorder",
-                         title = "Common encounters prior to disorder",
+                         title = "Common encounters prior to first diagnosed",
                          tableOutput("prior_encounter_disorder")
                 )
                 ,
                 tabPanel(value = "map",
                          title = "Home address of Patient",
-                         leafletOutput("map", height = '100')
+                         leafletOutput("map", height = 800)
                 )
             )
         )

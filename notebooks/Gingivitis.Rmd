@@ -47,7 +47,7 @@ ggplot(combined_age, aes(x = age, fill = group)) +
   geom_histogram(position = "identity", alpha = 0.5, bins = 30) +
   scale_fill_manual(values = c("blue", "red")) +
   theme_minimal() +
-  labs(title = "Histogram of Gingivitis population", x = "Value", y = "Frequency", fill = "Group")
+  labs(title = "Histogram of Gingivitis population", x = "Age", y = "Frequency", fill = "Group")
 ```
 
 ## Gender
@@ -73,7 +73,7 @@ combined_gender_proportion = combined_gender %>%
   mutate(Proportion = Prevalence / sum(Prevalence) * 100)
 
 
-ggplot(combined_gender_proportion, aes(x = Disease_status, y = Prevalence, fill = GENDER)) +
+ggplot(combined_gender_proportion, aes(x = factor(Disease_status), y = Prevalence, fill = GENDER)) +
   geom_bar(stat = "identity", position = "stack") +
   geom_text(
     aes(label = paste0(round(Proportion, 1), "%")), 
@@ -83,14 +83,14 @@ ggplot(combined_gender_proportion, aes(x = Disease_status, y = Prevalence, fill 
   theme_minimal() +
   scale_fill_manual(values = c("pink", "blue")) +
   labs(
-    title = "Disease Prevalence by Gender and Disease Status",
+    title = "Gingivitis Prevalence by Gender",
     x = "Disease Status",
     y = "Count",
     fill = "Gender"
   )
 ```
 
-## Frequency of encounter
+## Time
 
 ```{r Encounter Frequency}
 
@@ -106,7 +106,7 @@ ggplot(encounters_Gingivitis, aes(x = Year, y = Frequency)) +
   geom_text(aes(label = Frequency), vjust = -0.5) +  # Add labels above bars
   theme_minimal() +
   labs(
-    title = "Frequency of encounter caused by Gingivitis",
+    title = "Frequency of encounters caused by Gingivitis",
     x = "Year",
     y = "Frequency"
   )
