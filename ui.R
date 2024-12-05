@@ -37,7 +37,7 @@ fluidPage(
                          ),
                 tabPanel(value = "Procedure_disorder",
                          title = "Common procedures as treatment",
-                         tableOutput("proced_disorder")
+                         plotOutput("proced_disorder")
                          )
                 ,
                 tabPanel(value = "Riskfactor_disorder",

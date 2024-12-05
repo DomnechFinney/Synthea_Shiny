@@ -23,13 +23,27 @@ function(input, output, session) {
     })
     
     # Common procedure by disorder
-    output$proced_disorder <- renderTable({
-        procedure_by_treatment_react() %>%
+    output$proced_disorder <- renderPlot({
+        
+        data = procedure_by_treatment_react() %>%
             group_by(DESCRIPTION) %>%
             summarise(Procedures = n()) %>%
             arrange(desc(Procedures))
         
+        # Create the bar chart
+        ggplot(data, aes(x = fct_reorder(DESCRIPTION, Procedures, .desc = TRUE), y = Procedures, fill = DESCRIPTION)) +
+            geom_bar(stat = "identity") +
+            theme_minimal() +
+            labs(
+                title = "Medications",
+                x = "Medication",
+                y = "Frequency prescribed"
+            ) +
+            theme(
+                legend.position = "none"
+            )
     })
+        
     
     
     paient_diagnosis_first_date <- reactive({
